@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GYROSCOPE</title>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full"></script>
+    <script>
+        window.addEventListener(
+            "deviceorientation",handleOrientation);
+        function handleOrientation(
+            event){
+            var op = document.getElementById(
+                "op");
+            var canvas = document.getElementById(
+                "cop");
+            //simpleOp(event,op);
+            simpleOp2(event,canvas);
+            //simpleOp3(event,canvas,op);
+
+
+        }
+
+        function simpleOp3(
+            event,canvas,op){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var ctx = canvas.getContext("2d");
+            var ctx1 = canvas.getContext("2d");
+            var radius = Math.min(
+                canvas.width,canvas.height)/10;
+            var locationI = {
+                x:canvas.width/2,
+                y:canvas.height/2
+            }
+            var location = {
+                x:Math.round(locationI.x+event["gamma"]*1.6),
+                y:Math.round(locationI.y+event["beta"]*3.2)
+            }
+            let g = Math.min(
+                canvas.width,canvas.height)/(100);
+            
+            ctx.strokeStyle = ((((locationI.x-g) <= location.x)&&(location.x <= (locationI.x+g))) && (((locationI.y-g) <= location.y)&&(location.y <= (locationI.y+g))))?('green'):("red");
+            
+            ctx1.strokeStyle = (((locationI.x-g) <= location.x == (locationI.x+g)) && ((locationI.y-g) == location.y == (locationI.y+g)))?('green'):("red");
+            
+            let p = locationI.x+"--->"+location.x+"<br>"+locationI.y+"--->"+location.y+"<br>"+g+"<br>"+(((locationI.x-g) +"<="+ location.x +"<="+ (locationI.x+g)) +"&&" +((locationI.y-g) +"<="+ location.y +"<="+ (locationI.y+g)));
+            op.innerHTML = p;
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,op]);
+        
+        }
+        function simpleOp2(
+            event,canvas){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var ctx = canvas.getContext("2d");
+            var ctx1 = canvas.getContext("2d");
+            var radius = Math.min(
+                canvas.width,canvas.height)/10;
+            var locationI = {
+                x:canvas.width/2,
+                y:canvas.height/2
+            }
+            var location = {
+                x:Math.round(locationI.x+event["gamma"]*1.6),
+                y:Math.round(locationI.y+event["beta"]*3.2)
+            }
+            let g = Math.min(
+                canvas.width,canvas.height)/(100);
+            var radius1 = Math.min(
+                canvas.width,canvas.height)/10;
+            ctx.beginPath();
+            let c = ((((locationI.x-g) <= location.x)&&(location.x <= (locationI.x+g))) && (((locationI.y-g) <= location.y)&&(location.y <= (locationI.y+g))))?('green'):("red");
+            ctx.strokeStyle = c;
+            ctx.arc(location.x,location.y,radius,0,2*Math.PI);
+            ctx.stroke();
+            ctx1.beginPath();
+            ctx1.strokeStyle = c;
+
+            //ctx1.strokeStyle = (((locationI.x-g) <= location.x <= (locationI.x+g)) && ((locationI.y-g) <= location.y <= (locationI.y+g)))?('green'):("red");
+            ctx1.arc(locationI.x,locationI.y,radius1,0,2*Math.PI);
+            ctx1.stroke();
+            var properties = "";
+            console.log(locationI);
+            console.log(location);
+            
+            for(var prop in event){
+                properties += prop+" : "+event[prop]+"<br>";
+            }
+            //op.innerHTML = properties;
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,ctx]);
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,ctx1]);
+        }
+        function simpleOp(
+            event,op){
+            var properties = "";
+            for(var prop in event){
+                properties += prop+" : "+event[prop]+"<br>";
+            }
+            op.innerHTML = properties;
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,op]);
+        }
+
+
+    </script>
+</head>
+<body>
+    <!-- <h1>Hello</h1> -->
+    <div id="op"></div>
+    <canvas id = "cop"></canvas>
+</body>
+</html>
